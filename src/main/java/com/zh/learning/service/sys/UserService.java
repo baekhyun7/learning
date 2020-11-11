@@ -1,6 +1,6 @@
 package com.zh.learning.service.sys;
 
-import com.zh.learning.entity.po.po.sys.UserPo;
+import com.zh.learning.entity.po.sys.UserPo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

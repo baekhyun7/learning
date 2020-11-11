@@ -1,7 +1,14 @@
 package com.zh.learning.security;
 
 
+import com.zh.learning.entity.po.sys.MenuPo;
+import com.zh.learning.entity.po.sys.UserPo;
+import com.zh.learning.service.RedisService;
+import com.zh.learning.service.sys.MenuService;
+import com.zh.learning.service.sys.UserService;
+import com.zh.learning.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -23,14 +30,14 @@ import java.util.List;
 @Service
 public class StatelessRealm extends AuthorizingRealm {
 
-//    @Autowired
-//    private RedisService redisService;
-//
-//    @Autowired
-//    private UserService userService;
-//
-//    @Autowired
-//    private MenuService menuService;
+    @Autowired
+    private RedisService redisService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -43,19 +50,18 @@ public class StatelessRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
-//        StatelessToken statelessToken = (StatelessToken) token;
-//        String uniqueToken = statelessToken.getUniqueToken();
-//        log.debug("token = " + uniqueToken);
-//        // 判断token是否合法
-//        String customerId = TokenUtils.getUserIdByToken(uniqueToken);
-//        String tokenFromRedis = redisService.getToken(customerId);
-//        // 合法用户，则将token失效时间重置为一小时
-//        if (!StringUtils.isEmpty(tokenFromRedis)) {
-//            redisService.putToken(customerId, tokenFromRedis);
-//            redisService.putUserInfo(redisService.getUserInfo(customerId));
-//        }
-//        return new SimpleAuthenticationInfo(uniqueToken, tokenFromRedis, getName());
-            return null;
+        StatelessToken statelessToken = (StatelessToken) token;
+        String uniqueToken = statelessToken.getUniqueToken();
+        log.debug("token = " + uniqueToken);
+        // 判断token是否合法
+        String customerId = TokenUtil.getUserId(uniqueToken);
+        String tokenFromRedis = redisService.getToken(customerId);
+        // 合法用户，则将token失效时间重置为一小时
+        if (!StringUtils.isEmpty(tokenFromRedis)) {
+            redisService.putToken(customerId, tokenFromRedis);
+            redisService.putUserInfo(redisService.getUserInfo(customerId));
+        }
+        return new SimpleAuthenticationInfo(uniqueToken, tokenFromRedis, getName());
     }
 
     /**
@@ -63,30 +69,29 @@ public class StatelessRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-//        // 根据uniqueToken查找角色，请根据需求实现
-//        String uniqueToken = (String) principals.getPrimaryPrincipal();
-//        // 从token获取customerId
-//        String customerId = TokenUtils.getUserIdByToken(uniqueToken);
-//        // 通过customerId查询角色
-//        /*SysUserPo sysUserPo = new SysUserPo();
-//        sysUserPo.setId(customerId);*/
-//        UserPo sysUserPo = userService.getById(customerId);
+        // 根据uniqueToken查找角色，请根据需求实现
+        String uniqueToken = (String) principals.getPrimaryPrincipal();
+        // 从token获取customerId
+        String customerId = TokenUtil.getUserId(uniqueToken);
+        // 通过customerId查询角色
+        /*SysUserPo sysUserPo = new SysUserPo();
+        sysUserPo.setId(customerId);*/
+        UserPo sysUserPo = userService.getById(customerId);
 //
-//        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        if (sysUserPo != null) {
-//            List<MenuPo> list = menuService.getMenuList(customerId);
-//            for (MenuPo menuPo : list) {
-//                if (StringUtils.isNotBlank(menuPo.getPermission())) {
-//                    // 添加基于Permission的权限信息
-//                    for (String permission :
-//                            StringUtils.split(menuPo.getPermission(), ",")) {
-//                        authorizationInfo.addStringPermission(permission);
-//                    }
-//                }
-//            }
-//        }
-//        return authorizationInfo;
-        return null;
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        if (sysUserPo != null) {
+            List<MenuPo> list =  menuService.getMenuList(customerId);
+            for (MenuPo menuPo : list) {
+                if (StringUtils.isNotBlank(menuPo.getPermission())) {
+                    // 添加基于Permission的权限信息
+                    for (String permission :
+                            StringUtils.split(menuPo.getPermission(), ",")) {
+                        authorizationInfo.addStringPermission(permission);
+                    }
+                }
+            }
+        }
+        return authorizationInfo;
     }
 
 }

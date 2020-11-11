@@ -1,7 +1,7 @@
 package com.zh.learning.service.impl.sys;
 
-import com.zh.learning.entity.po.po.sys.UserPo;
-import com.zh.learning.mapper.sys.UserDao;
+import com.zh.learning.entity.po.sys.UserPo;
+import com.zh.learning.dao.sys.UserDao;
 import com.zh.learning.service.sys.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.zh.learning.mapper.sys;
+package com.zh.learning.dao.sys;
 
-import com.zh.learning.entity.po.po.sys.UserPo;
+import com.zh.learning.entity.po.sys.UserPo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

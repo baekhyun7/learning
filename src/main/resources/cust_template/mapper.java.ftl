@@ -3,6 +3,7 @@ package ${package.Mapper}.${package.ModuleName};
 import ${package.Entity}.po.${package.ModuleName}.${entity};
 import ${superMapperClassPackage};
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -13,6 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since ${date}
  */
 @Mapper
+@Repository
 <#if kotlin>
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 <#else>

@@ -1,4 +1,4 @@
-package com.zh.learning.entity.po.po.sys;
+package com.zh.learning.entity.po.sys;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class UserPo implements Serializable {
     private String id;
 
     @ApiModelProperty(value = "用户名")
-    private String nickname;
+    private String name;
 
     @ApiModelProperty(value = "密码")
     private String password;
@@ -53,9 +53,6 @@ public class UserPo implements Serializable {
 
     @ApiModelProperty(value = "最后登录日期")
     private Date loginDate;
-
-    @ApiModelProperty(value = "厂商")
-    private Integer factoryId;
 
     @ApiModelProperty(value = "冻结状态 0：未冻结 1：冻结")
     private Integer status;
