@@ -29,13 +29,12 @@ public class TokenUtil {
      * @return 加密的token
      */
     public static String sign(String userId) {
-        Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+//        Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         Algorithm algorithm = Algorithm.HMAC256(SECRET);
         // 附带username信息
         return JWT.create()
                 .withClaim(USER_ID, userId)
                 .withClaim("as", "a")
-                .withExpiresAt(date)
                 .sign(algorithm);
     }
 

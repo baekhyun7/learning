@@ -81,7 +81,7 @@ public class ApiConstants {
     /**
      * 登录失败次数后缀
      */
-    public static final String TIMES = "sec_times";
+    public static final String TIMES = "times";
 
     /**
      * 默认token后缀
@@ -91,12 +91,12 @@ public class ApiConstants {
     /**
      * 默认姓名后缀
      */
-    public static final String NAME = "sec_name";
+    public static final String NAME = "learning_name";
 
     /**
      * 默认邮箱后缀
      */
-    public static final String EMAIL = "sec_email";
+    public static final String EMAIL = "learning_email";
 
     /**
      * 验证码最大长度

@@ -23,7 +23,7 @@ public class RedisService {
     StringRedisTemplate template;
 
     public String getToken(String userId) {
-        return valueGet(userId+"-"+ ApiConstants.TOKEN);
+        return valueGet(userId+"_"+ ApiConstants.TOKEN);
     }
 
     /**
@@ -49,7 +49,36 @@ public class RedisService {
                 ApiConstants.DEFAULT_TOKEN_TIMEOUT,
                 TimeUnit.SECONDS);
     }
-
+    /**
+     * 登录失败 记录ip失败次数
+     */
+    public void putIpFailureTimes(String ip,String times) {
+        valueSet(ip + "_" + ApiConstants.TIMES,times,ApiConstants.DEFAULT_COOKIE_TIMEOUT,TimeUnit.SECONDS);
+    }
+    /**
+     * 登录失败 记录ip失败次数
+     */
+    public String getIpFailureTimes(String ip) {
+        return valueGet(ip + "_" + ApiConstants.TIMES);
+    }
+    /**
+     * 登录失败 记录用户失败次数
+     */
+    public void putEmailFailureTimes(String userEmail,String times) {
+        valueSet(userEmail + "_" + ApiConstants.TIMES,times,ApiConstants.DEFAULT_COOKIE_TIMEOUT,TimeUnit.SECONDS);
+    }
+    /**
+     * 登录失败 记录用户失败次数
+     */
+    public String getEmailFailureTimes(String userEmail) {
+        return valueGet(userEmail + "_" + ApiConstants.TIMES);
+    }
+    /**
+     * 登录失败 记录用户失败次数
+     */
+    public void delEmailFailureTimes(String userEmail) {
+        delete(userEmail + "_" + ApiConstants.TIMES);
+    }
     /**
      * 验证时，根据用户名，获取redis里面的用户信息，姓名和邮箱
      *
@@ -74,6 +103,16 @@ public class RedisService {
     public void valueSet(String key, String value, long timeout, TimeUnit timeUnit) {
         template.opsForValue().set(key, value, timeout, timeUnit);
     }
+    /**
+     * 设置缓存
+     *
+     * @param key      键
+     * @param value    值
+     */
+    public void valueSet(String key, String value) {
+        template.opsForValue().set(key, value);
+    }
+
 
     /**
      * 获取缓存

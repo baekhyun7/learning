@@ -3,8 +3,18 @@ package com.zh.learning.config;
 import com.alibaba.fastjson.JSON;
 import com.zh.learning.annotation.LogInfo;
 import com.zh.learning.controller.BaseController;
+import com.zh.learning.dao.sys.LogDao;
 import com.zh.learning.entity.ApiConstants;
+import com.zh.learning.entity.LogOperationEnum;
+import com.zh.learning.entity.ResponseEntity;
+import com.zh.learning.entity.po.sys.LogPo;
+import com.zh.learning.entity.po.sys.UserPo;
+import com.zh.learning.service.RedisService;
+import com.zh.learning.service.sys.UserService;
+import com.zh.learning.util.IpUtils;
+import com.zh.learning.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -32,6 +42,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class LogAspection {
 
+    @Autowired
+    LogDao logDao;
+
+    @Autowired
+    RedisService redisService;
 
     /**
      * 切入所有controller的public方法
@@ -51,19 +66,83 @@ public class LogAspection {
         // 获取操作名称
         LogInfo logInfo = ((MethodSignature) jp.getSignature())
                 .getMethod().getDeclaredAnnotation(LogInfo.class);
-        // 获取是否跳过记录日志的标识
-
-        try {
-
-        } catch (Throwable t) {
-
-        } finally {
-
+        String operation = "";
+        if(Objects.nonNull(logInfo)){
+            operation = logInfo.value().getOperation();
         }
-        return null;
+        Object obj = jp.proceed();
+        if (request.getRequestURI() != null && request.getRequestURI().contains(LOGIN_PATH)) {
+            // 登录日志需要特殊处理
+            saveOperLog(createLogVoForLogin(request, operation, obj));
+        } else {
+            // 记录操作日志
+            saveOperLog(createLogVoForOperation(request, operation, obj));
+        }
+        return obj;
+    }
+    /**
+     * 操作日志记录，需要存数据库
+     */
+    private void saveOperLog(LogPo logPo) {
+        logDao.insert(logPo);
+    }
+    /**
+     * 登录特殊处理，用户id需要从obj中获取
+     *
+     * @param obj 切点方法执行的结果对象
+     */
+    private LogPo createLogVoForLogin(HttpServletRequest request, String operation, Object obj) {
+
+        String userId = "";
+        String msg = "";
+        if (obj instanceof ResponseEntity) {
+            ResponseEntity map = (ResponseEntity) obj;
+            msg = map.getMsg();
+
+            // 获取userId
+            String token = BaseController.getToken(request);
+            userId = TokenUtil.getUserId(token);
+        }
+
+
+        return createLogVo(request, operation, msg, userId);
+    }
+    /**
+     * 登录特殊处理，用户id需要从obj中获取
+     *
+     * @param obj 切点方法执行的结果对象
+     */
+    private LogPo createLogVoForOperation(HttpServletRequest request, String operation, Object obj) {
+
+        String userId = "";
+        String msg = "";
+        if (obj instanceof ResponseEntity) {
+            ResponseEntity map = (ResponseEntity) obj;
+            msg = map.getMsg();
+            // 获取userId
+            String token = BaseController.getToken(request);
+            userId = TokenUtil.getUserId(token);
+        }
+
+        return createLogVo(request, operation, msg, userId);
     }
 
 
+    private LogPo createLogVo(HttpServletRequest request,String operation,String msg,String userId){
+        LogPo po = new LogPo();
+        po.setOperation(operation);
+        if(StringUtils.isNotBlank(userId)){
+            po.setUserId(userId);
+            UserPo byId = redisService.getUserInfo(userId);
+            po.setUserName(byId.getName());
+            po.setUserEmail(byId.getEmail());
+        }
+        po.setMsg(msg);
+        po.setUri(request.getRequestURI());
+        po.setIp(IpUtils.getRemoteAddr(request));
+        po.setCreateTime(new Date());
+        return po;
+    }
 
     private String getParams(HttpServletRequest request) {
         Map<String, String> params = new HashMap<>();

@@ -1,6 +1,6 @@
 package ${package.Mapper}.${package.ModuleName};
 
-import ${package.Entity}.po.${package.ModuleName}.${entity};
+import ${package.Entity}.${package.ModuleName}.${entity};
 import ${superMapperClassPackage};
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

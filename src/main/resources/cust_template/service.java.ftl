@@ -1,6 +1,6 @@
 package ${package.Service}.${package.ModuleName};
 
-import ${package.Entity}.po.${package.ModuleName}.${entity};
+import ${package.Entity}.${package.ModuleName}.${entity};
 import ${superServiceClassPackage};
 
 /**

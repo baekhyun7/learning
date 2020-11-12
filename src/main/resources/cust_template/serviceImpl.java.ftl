@@ -1,6 +1,6 @@
 package ${package.ServiceImpl}.${package.ModuleName};
 
-import ${package.Entity}.po.${package.ModuleName}.${entity};
+import ${package.Entity}.${package.ModuleName}.${entity};
 import ${package.Mapper}.${package.ModuleName}.${table.mapperName};
 import ${package.Service}.${package.ModuleName}.${table.serviceName};
 import ${superServiceImplClassPackage};

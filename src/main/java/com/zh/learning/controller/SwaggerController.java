@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Api(value = "swagger的实例controller")
 @RestController
-@RequestMapping("/swagger")
+@RequestMapping("/api/swagger")
 public class SwaggerController {
 
     @ApiOperation(value = "get请求")

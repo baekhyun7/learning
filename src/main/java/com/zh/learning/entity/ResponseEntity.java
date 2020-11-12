@@ -46,7 +46,10 @@ public class ResponseEntity {
         responseEntity.setMsg(msg);
         return responseEntity;
     }
-
+    public static ResponseEntity success(String msg,Object data) {
+        ResponseEntity responseEntity = new ResponseEntity(msg,ResponseEnum.SUCCESS.getCode(), data);
+        return responseEntity;
+    }
     public static ResponseEntity success(int code) {
         ResponseEntity responseEntity = new ResponseEntity(ResponseEnum.SUCCESS);
         responseEntity.setCode(code);

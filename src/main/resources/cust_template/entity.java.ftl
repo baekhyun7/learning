@@ -1,4 +1,4 @@
-package ${package.Entity}.po.${package.ModuleName};
+package ${package.Entity}.${package.ModuleName};
 
 <#list table.importPackages as pkg>
 import ${pkg};

@@ -36,26 +36,7 @@ public class UserPo implements Serializable {
     @ApiModelProperty(value = "邮箱")
     private String email;
 
-    @ApiModelProperty(value = "这次登录ip")
-    private String loginIp;
-
     @ApiModelProperty(value = "用户创建时间")
     private Date createTime;
-
-    @ApiModelProperty(value = "最近登录地点")
-    private String lastLoginPlace;
-
-    @ApiModelProperty(value = "上次登录IP")
-    private String lastLoginIp;
-
-    @ApiModelProperty(value = "上次登录日期")
-    private Date lastLoginDate;
-
-    @ApiModelProperty(value = "最后登录日期")
-    private Date loginDate;
-
-    @ApiModelProperty(value = "冻结状态 0：未冻结 1：冻结")
-    private Integer status;
-
 
 }
