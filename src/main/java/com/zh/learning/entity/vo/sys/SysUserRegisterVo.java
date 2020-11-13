@@ -10,7 +10,10 @@ import javax.validation.constraints.Size;
  * @author zh
  */
 @Data
-public class SysUserLoginVo {
+public class SysUserRegisterVo {
+    @Size(min = 1, max = 255, message = "用户名错误")
+    String name;
+
     @Size(min = 1, max = 255, message = "用户长度错误")
     @Pattern(regexp = RegxpConstants.IS_MAIL,message = "用户格式错误")
     String userEmail;

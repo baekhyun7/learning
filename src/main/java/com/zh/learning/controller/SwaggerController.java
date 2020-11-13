@@ -1,7 +1,7 @@
 package com.zh.learning.controller;
 
 import com.zh.learning.annotation.LogInfo;
-import com.zh.learning.entity.LogOperationEnum;
+import com.zh.learning.constants.LogOperationEnum;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.exception.ApiException;
 import com.zh.learning.vo.User;
@@ -10,10 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author zh

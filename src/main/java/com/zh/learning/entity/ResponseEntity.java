@@ -77,7 +77,12 @@ public class ResponseEntity {
         responseEntity.setCode(code);
         return responseEntity;
     }
-
+    public static ResponseEntity fail(int code,String msg) {
+        ResponseEntity responseEntity = new ResponseEntity();
+        responseEntity.setCode(code);
+        responseEntity.setMsg(msg);
+        return responseEntity;
+    }
     public static ResponseEntity fail() {
         ResponseEntity responseEntity = new ResponseEntity(ResponseEnum.FAIL);
         return responseEntity;

@@ -2,9 +2,7 @@ package com.zh.learning.security;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zh.learning.controller.BaseController;
-import com.zh.learning.entity.ApiConstants;
-import com.zh.learning.entity.ResponseEntity;
-import com.zh.learning.entity.ResponseEnum;
+import com.zh.learning.constants.ApiConstants;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
 import javax.servlet.ServletRequest;

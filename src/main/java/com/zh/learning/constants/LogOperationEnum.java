@@ -1,4 +1,4 @@
-package com.zh.learning.entity;
+package com.zh.learning.constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,10 @@ public enum LogOperationEnum {
      * 登录
      */
     LOGIN("登录"),
-
+    /**
+     * 登录
+     */
+    REGISTER("注册"),
     /**
      * 退出
      */

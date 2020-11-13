@@ -1,28 +1,32 @@
 package com.zh.learning.controller.sys;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zh.learning.annotation.LogInfo;
 import com.zh.learning.controller.BaseController;
-import com.zh.learning.entity.ApiConstants;
+import com.zh.learning.constants.ApiConstants;
+import com.zh.learning.constants.LogOperationEnum;
 import com.zh.learning.entity.ResponseEntity;
+import com.zh.learning.entity.ResponseEnum;
 import com.zh.learning.entity.po.sys.UserPo;
 import com.zh.learning.entity.vo.sys.SysUserLoginVo;
+import com.zh.learning.entity.vo.sys.SysUserRegisterVo;
 import com.zh.learning.service.RedisService;
 import com.zh.learning.service.sys.MenuService;
 import com.zh.learning.service.sys.UserService;
+import com.zh.learning.util.IdUtils;
 import com.zh.learning.util.IpUtils;
 import com.zh.learning.util.TokenUtil;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,6 +51,7 @@ public class LoginController extends BaseController {
 
 
     @RequestMapping(value = "/anon/login", method = RequestMethod.POST)
+    @LogInfo(value = LogOperationEnum.LOGIN)
     public ResponseEntity login(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid SysUserLoginVo sysUserLoginVO) {
         String userEmail = sysUserLoginVO.getUserEmail();
         String password = sysUserLoginVO.getPassword();
@@ -86,6 +91,38 @@ public class LoginController extends BaseController {
         return ResponseEntity.success("登录成功",data);
     }
 
+    @RequestMapping(value = "/anon/register", method = RequestMethod.POST)
+    @LogInfo(value = LogOperationEnum.REGISTER)
+    public ResponseEntity register(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid SysUserRegisterVo sysUserRegisterVo) {
+        String userEmail = sysUserRegisterVo.getUserEmail();
+        String password = sysUserRegisterVo.getPassword();
+        String name = sysUserRegisterVo.getName();
+        QueryWrapper<UserPo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name",name).or().eq("email",userEmail);
+        int count = userService.count(queryWrapper);
+        if(count!=0){
+            return ResponseEntity.fail("该用户名或该邮箱已被注册！");
+        }
+        UserPo userPo = new UserPo();
+        userPo.setId(IdUtils.uuid());
+        userPo.setEmail(userEmail);
+        userPo.setName(name);
+        userPo.setPassword(password);
+        userPo.setCreateTime(new Date());
+        userService.save(userPo);
+        return ResponseEntity.success("注册成功",userPo);
+    }
+    /**
+     * 用户退出登录
+     */
+    @LogInfo(LogOperationEnum.LOGOUT)
+    @PostMapping(value = "/api/logout")
+    public Object logout(HttpServletRequest request, HttpServletResponse response) {
+
+        String id = getUserId();
+        redisService.delToken(id);
+        return ResponseEntity.success(ResponseEnum.SUCCESS.getMsg());
+    }
     public boolean emailFailureTime(String userEmail) {
         String emailFailureTimes = redisService.getEmailFailureTimes(userEmail);
         if (StringUtils.isNotBlank(emailFailureTimes) && Integer.parseInt(emailFailureTimes) > ApiConstants.MAX_DEFAULT_TIMES) {

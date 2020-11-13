@@ -38,8 +38,8 @@ public class LogPo implements Serializable {
     @ApiModelProperty(value = "操作者email")
     private String userEmail;
 
-    @ApiModelProperty(value = "菜单")
-    private String menu;
+    @ApiModelProperty(value = "请求结果")
+    private String resStatus;
 
     @ApiModelProperty(value = "请求的资源")
     private String uri;

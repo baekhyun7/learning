@@ -1,4 +1,4 @@
-package com.zh.learning.entity;
+package com.zh.learning.constants;
 
 /**
  * api常量

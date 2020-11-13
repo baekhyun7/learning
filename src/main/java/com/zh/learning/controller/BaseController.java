@@ -1,11 +1,8 @@
 package com.zh.learning.controller;
 
-import com.zh.learning.entity.ApiConstants;
-import com.zh.learning.entity.ResponseEntity;
-import com.zh.learning.exception.ApiException;
-import com.zh.learning.vo.User;
+import com.zh.learning.constants.ApiConstants;
+import com.zh.learning.util.TokenUtil;
 import io.swagger.annotations.Api;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -44,6 +41,18 @@ public class BaseController {
             }
         }
         return uniqueToken;
+    }
+
+    /**
+     * 得到当前token
+     *
+     * @return
+     * @author candy
+     */
+    public static String getUserId() {
+        String token = getToken(getRequest());
+        String userId = TokenUtil.getUserId(token);
+        return userId;
     }
 
     /**

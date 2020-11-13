@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.zh.learning.annotation.LogInfo;
 import com.zh.learning.controller.BaseController;
 import com.zh.learning.dao.sys.LogDao;
-import com.zh.learning.entity.ApiConstants;
-import com.zh.learning.entity.LogOperationEnum;
+import com.zh.learning.constants.ApiConstants;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.entity.po.sys.LogPo;
 import com.zh.learning.entity.po.sys.UserPo;
 import com.zh.learning.service.RedisService;
-import com.zh.learning.service.sys.UserService;
 import com.zh.learning.util.IpUtils;
 import com.zh.learning.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +20,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.NamedThreadLocal;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * controller调试日志和访问操作日志aop切面类
@@ -56,6 +51,7 @@ public class LogAspection {
     }
 
     private static final String LOGIN_PATH = "/anon/login";
+    private static final String REGISTER_PATH = "/anon/register";
 
     /**
      * 定义环绕通知，在访问时记录访问信息，在离开时记录结果
@@ -71,7 +67,7 @@ public class LogAspection {
             operation = logInfo.value().getOperation();
         }
         Object obj = jp.proceed();
-        if (request.getRequestURI() != null && request.getRequestURI().contains(LOGIN_PATH)) {
+        if (request.getRequestURI() != null && request.getRequestURI().contains(LOGIN_PATH)||request.getRequestURI().contains(REGISTER_PATH)) {
             // 登录日志需要特殊处理
             saveOperLog(createLogVoForLogin(request, operation, obj));
         } else {
@@ -95,17 +91,29 @@ public class LogAspection {
 
         String userId = "";
         String msg = "";
+        String resStatus = SUCCESS_STRING;
         if (obj instanceof ResponseEntity) {
             ResponseEntity map = (ResponseEntity) obj;
             msg = map.getMsg();
 
             // 获取userId
             String token = BaseController.getToken(request);
-            userId = TokenUtil.getUserId(token);
+            if(Objects.nonNull(token)){
+                userId = TokenUtil.getUserId(token);
+            }else{
+                if(map.getData() instanceof UserPo){
+                    userId = ((UserPo) map.getData()).getId();
+                }
+            }
+            int code = map.getCode();
+
+            if (!Integer.valueOf(ApiConstants.SUCCESS_CODE).equals(code)) {
+                resStatus = FAIL_STRING;
+            }
         }
 
 
-        return createLogVo(request, operation, msg, userId);
+        return createLogVo(request, operation, resStatus,msg, userId);
     }
     /**
      * 登录特殊处理，用户id需要从obj中获取
@@ -116,19 +124,26 @@ public class LogAspection {
 
         String userId = "";
         String msg = "";
+        String resStatus = SUCCESS_STRING;
         if (obj instanceof ResponseEntity) {
             ResponseEntity map = (ResponseEntity) obj;
             msg = map.getMsg();
+            int code = map.getCode();
             // 获取userId
             String token = BaseController.getToken(request);
-            userId = TokenUtil.getUserId(token);
+            if(Objects.nonNull(token)){
+                userId = TokenUtil.getUserId(token);
+            }
+            if (!Integer.valueOf(ApiConstants.SUCCESS_CODE).equals(code)) {
+                resStatus = FAIL_STRING;
+            }
         }
 
-        return createLogVo(request, operation, msg, userId);
+        return createLogVo(request, operation, resStatus, msg, userId);
     }
 
 
-    private LogPo createLogVo(HttpServletRequest request,String operation,String msg,String userId){
+    private LogPo createLogVo(HttpServletRequest request,String operation,String resStatus ,String msg,String userId){
         LogPo po = new LogPo();
         po.setOperation(operation);
         if(StringUtils.isNotBlank(userId)){
@@ -138,6 +153,7 @@ public class LogAspection {
             po.setUserEmail(byId.getEmail());
         }
         po.setMsg(msg);
+        po.setResStatus(resStatus);
         po.setUri(request.getRequestURI());
         po.setIp(IpUtils.getRemoteAddr(request));
         po.setCreateTime(new Date());
@@ -194,11 +210,11 @@ public class LogAspection {
     /**
      * 成功代码
      */
-    private static final int SUCCESS_CODE = 1;
+    private static final String SUCCESS_STRING = "成功";
 
     /**
      * 失败代码
      */
-    private static final int FAIL_CODE = 2;
+    private static final String FAIL_STRING = "失败";
 
 }

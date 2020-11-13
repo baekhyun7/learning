@@ -1,6 +1,6 @@
 package com.zh.learning.service;
 
-import com.zh.learning.entity.ApiConstants;
+import com.zh.learning.constants.ApiConstants;
 import com.zh.learning.entity.po.sys.UserPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,6 +26,13 @@ public class RedisService {
         return valueGet(userId+"_"+ ApiConstants.TOKEN);
     }
 
+    /**
+     * 删除token
+     * @param userId
+     */
+    public void delToken(String userId) {
+        delete(userId+"_"+ ApiConstants.TOKEN);
+    }
     /**
      * 登录成功后，生成token，并放验证码到redis服务器
      */

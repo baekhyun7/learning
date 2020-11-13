@@ -3,6 +3,7 @@ package com.zh.learning.exception;
 
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.entity.ResponseEnum;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity exceptionHandler(HttpServletRequest req, Exception e){
         logger.error("未知异常！原因是:{}",e.getMessage());
         return ResponseEntity.fail(ResponseEnum.EXCEPTION,e.getMessage());
+    }
+    @ExceptionHandler(value = UnauthorizedException.class)
+    @ResponseBody
+    public ResponseEntity unauthHandler(HttpServletRequest req, Exception e){
+        logger.error("权限异常！原因是:{}",e.getMessage());
+        return ResponseEntity.fail(ResponseEnum.AUTHORIZATION_ILLEGAL);
     }
 
     @ExceptionHandler(value =ApiException.class)

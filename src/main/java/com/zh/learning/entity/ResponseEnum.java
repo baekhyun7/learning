@@ -15,7 +15,8 @@ public enum ResponseEnum {
     FAIL(500, "服务器内部错误"),
     TOKEN_FAIL(501, "用户未登录"),
 
-    EXCEPTION(400,"异常操作")
+    EXCEPTION(400,"异常操作"),
+    AUTHORIZATION_ILLEGAL(401,"用户权限不足")
     ;
     ResponseEnum(int code, String msg) {
         this.code = code;
