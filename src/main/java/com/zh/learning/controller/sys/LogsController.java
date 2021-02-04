@@ -4,6 +4,7 @@ import com.zh.learning.constants.ApiConstants;
 import com.zh.learning.controller.BaseController;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.service.sys.LogService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -28,6 +29,7 @@ import java.util.Date;
  * @author zh
  * @date 2020
  **/
+@Api(tags = "日志")
 @RestController
 @RequestMapping("/api/system")
 @Slf4j

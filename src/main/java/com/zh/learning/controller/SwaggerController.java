@@ -1,6 +1,7 @@
 package com.zh.learning.controller;
 
 import com.zh.learning.annotation.LogInfo;
+import com.zh.learning.annotation.LoginRequire;
 import com.zh.learning.constants.LogOperationEnum;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.exception.ApiException;
@@ -23,6 +24,7 @@ public class SwaggerController {
 
     @ApiOperation(value = "get请求")
     @GetMapping()
+    @LoginRequire
     public ResponseEntity testGet(@ApiParam(value = "id" , required=true ) @RequestParam(value = "id") String id){
         if(id.equals("1")){
             throw new ApiException("这个接口有问题");

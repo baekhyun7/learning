@@ -17,6 +17,7 @@ import com.zh.learning.util.IdUtils;
 import com.zh.learning.util.IpUtils;
 import com.zh.learning.util.TokenUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ import java.util.Objects;
  * @version 1.0
  * @date 2020/11/12 11:10
  */
-@Api(value = "登录")
+@Api(tags = "登录")
 @RestController
 @RequestMapping
 public class LoginController extends BaseController {
@@ -50,6 +51,7 @@ public class LoginController extends BaseController {
     MenuService menuService;
 
 
+    @ApiOperation(value = "登录")
     @RequestMapping(value = "/anon/login", method = RequestMethod.POST)
     @LogInfo(value = LogOperationEnum.LOGIN)
     public ResponseEntity login(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid SysUserLoginVo sysUserLoginVO) {
@@ -90,7 +92,7 @@ public class LoginController extends BaseController {
 
         return ResponseEntity.success("登录成功",data);
     }
-
+    @ApiOperation(value = "注册")
     @RequestMapping(value = "/anon/register", method = RequestMethod.POST)
     @LogInfo(value = LogOperationEnum.REGISTER)
     public ResponseEntity register(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid SysUserRegisterVo sysUserRegisterVo) {
@@ -115,6 +117,7 @@ public class LoginController extends BaseController {
     /**
      * 用户退出登录
      */
+    @ApiOperation(value = "用户退出登录")
     @LogInfo(LogOperationEnum.LOGOUT)
     @PostMapping(value = "/api/logout")
     public Object logout(HttpServletRequest request, HttpServletResponse response) {

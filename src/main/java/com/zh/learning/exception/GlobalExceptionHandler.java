@@ -1,6 +1,7 @@
 package com.zh.learning.exception;
 
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.entity.ResponseEnum;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = UnauthorizedException.class)
     @ResponseBody
-    public ResponseEntity unauthHandler(HttpServletRequest req, Exception e){
+    public ResponseEntity unauthHandler(HttpServletRequest req, UnauthorizedException e){
         logger.error("权限异常！原因是:{}",e.getMessage());
         return ResponseEntity.fail(ResponseEnum.AUTHORIZATION_ILLEGAL);
     }
@@ -50,6 +51,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity paramExceptionHandler(HttpServletRequest req, MethodArgumentNotValidException e){
         logger.error("参数校验异常！原因是:{}",e.getMessage());
         return ResponseEntity.fail(ResponseEnum.EXCEPTION,e.getBindingResult().getFieldError().getDefaultMessage());
+    }
+
+    @ExceptionHandler(value =JWTDecodeException.class)
+    @ResponseBody
+    public ResponseEntity paramTokenExceptionHandler(HttpServletRequest req, JWTDecodeException e){
+        logger.error("token校验异常！原因是:{}",e.getMessage());
+        return ResponseEntity.fail(ResponseEnum.EXCEPTION,"token错误");
     }
 
 
