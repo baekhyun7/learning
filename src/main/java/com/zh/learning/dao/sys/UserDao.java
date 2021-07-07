@@ -3,6 +3,7 @@ package com.zh.learning.dao.sys;
 import com.zh.learning.entity.po.sys.UserPo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -13,6 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-11-02
  */
 @Mapper
+@Repository
 public interface UserDao extends BaseMapper<UserPo> {
 
 }
