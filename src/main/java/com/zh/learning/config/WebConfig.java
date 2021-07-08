@@ -7,10 +7,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * @author zh
  * @version 1.0
