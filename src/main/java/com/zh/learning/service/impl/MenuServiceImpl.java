@@ -1,4 +1,4 @@
-package com.zh.learning.service.impl.sys;
+package com.zh.learning.service.impl;
 
 import com.zh.learning.dao.sys.MenuDao;
 import com.zh.learning.entity.po.sys.MenuPo;

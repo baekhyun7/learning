@@ -1,4 +1,4 @@
-package com.zh.learning.service.impl.sys;
+package com.zh.learning.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

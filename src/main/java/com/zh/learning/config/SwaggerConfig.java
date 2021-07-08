@@ -32,12 +32,12 @@ public class SwaggerConfig {
 
     @Bean
     public Docket createRestApi(){
-        ParameterBuilder parameterBuilder=new ParameterBuilder();
+//        ParameterBuilder parameterBuilder=new ParameterBuilder();
+//        parameterBuilder.name("zh_token").description("token令牌").modelRef(new ModelRef("String"))
+//                .parameterType("header")
+//                .required(true).build();
         List<Parameter> parameters= Lists.newArrayList();
-        parameterBuilder.name("zh_token").description("token令牌").modelRef(new ModelRef("String"))
-                .parameterType("header")
-                .required(true).build();
-        parameters.add(parameterBuilder.build());
+//        parameters.add(parameterBuilder.build());
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())

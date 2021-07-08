@@ -1,25 +1,13 @@
-package com.zh.learning.controller.TransactionController;
+package com.zh.learning.controller.transaction;
 
-import com.zh.learning.annotation.LogInfo;
-import com.zh.learning.constants.ApiConstants;
-import com.zh.learning.constants.LogOperationEnum;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.service.sys.UserService;
-import com.zh.learning.util.TokenUtil;
-import com.zh.learning.vo.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author zh
