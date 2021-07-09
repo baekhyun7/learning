@@ -180,7 +180,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         //分页
         if (Objects.nonNull(pageNum)) {
-            sourceBuilder.from(pageNum);
+            sourceBuilder.from((pageNum - 1) * pageSize);
         }
         if (Objects.nonNull(pageSize)) {
             sourceBuilder.size(pageSize);
