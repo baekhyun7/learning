@@ -6,10 +6,10 @@ import lombok.Data;
 
 /**
  * @author zh
- * @date 2021/7/8
+ * @date 2021/7/9
  */
 @Data
-public class ElasticSearchAddIndexReq extends ElasticSearchReq {
+public class ElasticSearchUpdateIndexReq extends ElasticSearchReq{
 
     @ApiModelProperty(value = "user", name = "用户数据")
     private User user;

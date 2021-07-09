@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @date 2020/10/22 16:52
  */
-@Api(value = "事务测试controller")
+@Api(tags = "事务测试")
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {

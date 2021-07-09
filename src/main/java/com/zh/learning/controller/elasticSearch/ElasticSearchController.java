@@ -5,6 +5,8 @@ import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.service.es.ElasticSearchService;
 import com.zh.learning.vo.User;
 import com.zh.learning.vo.request.ElasticSearchAddIndexReq;
+import com.zh.learning.vo.request.ElasticSearchReq;
+import com.zh.learning.vo.request.ElasticSearchUpdateIndexReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -67,6 +69,20 @@ public class ElasticSearchController extends BaseController {
     @PostMapping(value = "/addDoc")
     public ResponseEntity addDoc(@RequestBody ElasticSearchAddIndexReq req) {
         Object o = elasticSearchService.addDoc(req);
+        return ResponseEntity.success(o);
+    }
+
+    @ApiOperation(value = "修改文档")
+    @PostMapping(value = "/updateDoc")
+    public ResponseEntity updateDoc(@RequestBody ElasticSearchUpdateIndexReq req) {
+        Object o = elasticSearchService.updateDoc(req);
+        return ResponseEntity.success(o);
+    }
+
+    @ApiOperation(value = "删除文档")
+    @PostMapping(value = "/deleteDoc")
+    public ResponseEntity deleteDoc(@RequestBody ElasticSearchReq req) {
+        Object o = elasticSearchService.deleteDoc(req);
         return ResponseEntity.success(o);
     }
 }

@@ -2,6 +2,8 @@ package com.zh.learning.service.es;
 
 import com.zh.learning.vo.User;
 import com.zh.learning.vo.request.ElasticSearchAddIndexReq;
+import com.zh.learning.vo.request.ElasticSearchReq;
+import com.zh.learning.vo.request.ElasticSearchUpdateIndexReq;
 
 import java.util.List;
 
@@ -47,19 +49,18 @@ public interface ElasticSearchService {
     /**
      * 修改文档记录
      *
-     * @param indexName
-     * @param id
-     * @param data
+     * @param req
+     * @return
      */
-    void updateDoc(String indexName, String id, String data);
+    Object updateDoc(ElasticSearchUpdateIndexReq req);
 
     /**
      * 删除文档记录
      *
-     * @param indexName
-     * @param id
+     * @param req
+     * @return
      */
-    void deleteDoc(String indexName, String id);
+    Object deleteDoc(ElasticSearchReq req);
 
     List<User> getAll(String indexName,
                       String keyWord,
