@@ -2,15 +2,17 @@ package com.zh.learning.config;
 
 import com.alibaba.fastjson.JSON;
 import com.zh.learning.annotation.LogInfo;
+import com.zh.learning.constants.ApiConstants;
 import com.zh.learning.controller.BaseController;
 import com.zh.learning.dao.sys.LogDao;
-import com.zh.learning.constants.ApiConstants;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.entity.po.sys.LogPo;
 import com.zh.learning.entity.po.sys.UserPo;
 import com.zh.learning.service.RedisService;
+import com.zh.learning.service.es.LogElasticSearchService;
 import com.zh.learning.util.IpUtils;
 import com.zh.learning.util.TokenUtil;
+import com.zh.learning.vo.request.ElasticSearchLogAddIndexReq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
@@ -39,6 +41,8 @@ public class LogAspection {
 
     @Autowired
     LogDao logDao;
+    @Autowired
+    LogElasticSearchService logElasticSearchService;
 
     @Autowired
     RedisService redisService;
@@ -63,11 +67,11 @@ public class LogAspection {
         LogInfo logInfo = ((MethodSignature) jp.getSignature())
                 .getMethod().getDeclaredAnnotation(LogInfo.class);
         String operation = "";
-        if(Objects.nonNull(logInfo)){
+        if (Objects.nonNull(logInfo)) {
             operation = logInfo.value().getOperation();
         }
         Object obj = jp.proceed();
-        if (request.getRequestURI() != null && request.getRequestURI().contains(LOGIN_PATH)||request.getRequestURI().contains(REGISTER_PATH)) {
+        if (request.getRequestURI() != null && request.getRequestURI().contains(LOGIN_PATH) || request.getRequestURI().contains(REGISTER_PATH)) {
             // 登录日志需要特殊处理
             saveOperLog(createLogVoForLogin(request, operation, obj));
         } else {
@@ -76,12 +80,18 @@ public class LogAspection {
         }
         return obj;
     }
+
     /**
      * 操作日志记录，需要存数据库
      */
     private void saveOperLog(LogPo logPo) {
         logDao.insert(logPo);
+        ElasticSearchLogAddIndexReq req = new ElasticSearchLogAddIndexReq();
+        req.setLogPo(logPo);
+        req.setIndexName("log");
+        logElasticSearchService.addDoc(req);
     }
+
     /**
      * 登录特殊处理，用户id需要从obj中获取
      *
@@ -98,10 +108,10 @@ public class LogAspection {
 
             // 获取userId
             String token = BaseController.getToken(request);
-            if(Objects.nonNull(token)){
+            if (Objects.nonNull(token)) {
                 userId = TokenUtil.getUserId(token);
-            }else{
-                if(map.getData() instanceof UserPo){
+            } else {
+                if (map.getData() instanceof UserPo) {
                     userId = ((UserPo) map.getData()).getId();
                 }
             }
@@ -113,8 +123,9 @@ public class LogAspection {
         }
 
 
-        return createLogVo(request, operation, resStatus,msg, userId);
+        return createLogVo(request, operation, resStatus, msg, userId);
     }
+
     /**
      * 登录特殊处理，用户id需要从obj中获取
      *
@@ -131,7 +142,7 @@ public class LogAspection {
             int code = map.getCode();
             // 获取userId
             String token = BaseController.getToken(request);
-            if(Objects.nonNull(token)){
+            if (Objects.nonNull(token)) {
                 userId = TokenUtil.getUserId(token);
             }
             if (!Integer.valueOf(ApiConstants.SUCCESS_CODE).equals(code)) {
@@ -143,10 +154,10 @@ public class LogAspection {
     }
 
 
-    private LogPo createLogVo(HttpServletRequest request,String operation,String resStatus ,String msg,String userId){
+    private LogPo createLogVo(HttpServletRequest request, String operation, String resStatus, String msg, String userId) {
         LogPo po = new LogPo();
         po.setOperation(operation);
-        if(StringUtils.isNotBlank(userId)){
+        if (StringUtils.isNotBlank(userId)) {
             po.setUserId(userId);
             UserPo byId = redisService.getUserInfo(userId);
             po.setUserName(byId.getName());
@@ -202,9 +213,6 @@ public class LogAspection {
         }
         return url;
     }
-
-
-
 
 
     /**

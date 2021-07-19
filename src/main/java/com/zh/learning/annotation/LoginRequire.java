@@ -1,7 +1,5 @@
 package com.zh.learning.annotation;
 
-import com.zh.learning.constants.LogOperationEnum;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

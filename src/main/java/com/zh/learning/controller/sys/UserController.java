@@ -1,35 +1,24 @@
 package com.zh.learning.controller.sys;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zh.learning.annotation.LogInfo;
-import com.zh.learning.constants.ApiConstants;
 import com.zh.learning.constants.LogOperationEnum;
 import com.zh.learning.controller.BaseController;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.entity.ResponseEnum;
 import com.zh.learning.entity.po.sys.UserPo;
-import com.zh.learning.entity.vo.sys.SysUserLoginVo;
-import com.zh.learning.entity.vo.sys.SysUserRegisterVo;
 import com.zh.learning.service.RedisService;
 import com.zh.learning.service.sys.MenuService;
 import com.zh.learning.service.sys.UserService;
-import com.zh.learning.util.IdUtils;
-import com.zh.learning.util.IpUtils;
-import com.zh.learning.util.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author zh
@@ -60,16 +49,17 @@ public class UserController extends BaseController {
                                   @RequestParam(value = "email", required = false) String email,
                                   @RequestParam(value = "businessId", required = false) String businessId,
                                   @RequestParam(value = "websiteName", required = false) String websiteName) {
-
-        return ResponseEntity.success("登录成功","data");
+        userService.getPageList(pageNum, pageSize);
+        return ResponseEntity.success("登录成功", "data");
     }
+
     @ApiOperation(value = "查询单个用户")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity register(HttpServletRequest request, HttpServletResponse response,
                                    @RequestParam(value = "id") String id) {
-
-        return ResponseEntity.success("注册成功","userPo");
+        return ResponseEntity.success("注册成功", "userPo");
     }
+
     /**
      * 新增用户
      */
@@ -79,6 +69,7 @@ public class UserController extends BaseController {
     public Object add() {
         return ResponseEntity.success(ResponseEnum.SUCCESS.getMsg());
     }
+
     /**
      * 编辑用户
      */
@@ -88,6 +79,7 @@ public class UserController extends BaseController {
     public Object update() {
         return ResponseEntity.success(ResponseEnum.SUCCESS.getMsg());
     }
+
     /**
      * 删除用户
      */

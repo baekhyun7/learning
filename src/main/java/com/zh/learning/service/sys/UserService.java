@@ -3,6 +3,8 @@ package com.zh.learning.service.sys;
 import com.zh.learning.entity.po.sys.UserPo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -28,5 +30,8 @@ public interface UserService extends IService<UserPo> {
      * 新增用户 - 事务测试
      */
     void addUser2() throws Exception;
+
+
+    List<UserPo> getPageList(Integer pageNum,Integer pageSize);
 
 }

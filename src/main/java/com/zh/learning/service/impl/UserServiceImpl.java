@@ -1,5 +1,8 @@
 package com.zh.learning.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zh.learning.entity.po.sys.UserPo;
 import com.zh.learning.dao.sys.UserDao;
 import com.zh.learning.service.sys.UserService;
@@ -8,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author zh
@@ -38,6 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPo> implements Use
 //            throw new Exception("aaaa");
         }
     }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addUser2() throws Exception {
@@ -48,5 +54,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserPo> implements Use
         userPo.setPassword("2");
         userDao.insert(userPo);
         throw new RuntimeException("2方法抛出异常");
+    }
+
+    @Override
+    public List<UserPo> getPageList(Integer pageNum, Integer pageSize) {
+        Page page = new Page(pageNum, pageSize);
+        QueryWrapper<UserPo> wrapper = new QueryWrapper<>();
+        IPage<UserPo> pageInfo = userDao.getPageInfo(page, wrapper);
+        return pageInfo.getRecords();
     }
 }
