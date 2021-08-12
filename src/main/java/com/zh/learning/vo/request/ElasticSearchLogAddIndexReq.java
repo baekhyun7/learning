@@ -1,7 +1,6 @@
 package com.zh.learning.vo.request;
 
 import com.zh.learning.entity.po.sys.LogPo;
-import com.zh.learning.vo.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

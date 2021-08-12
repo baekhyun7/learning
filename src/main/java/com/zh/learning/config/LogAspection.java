@@ -86,10 +86,10 @@ public class LogAspection {
      */
     private void saveOperLog(LogPo logPo) {
         logDao.insert(logPo);
-        ElasticSearchLogAddIndexReq req = new ElasticSearchLogAddIndexReq();
-        req.setLogPo(logPo);
-        req.setIndexName("log");
-        logElasticSearchService.addDoc(req);
+//        ElasticSearchLogAddIndexReq req = new ElasticSearchLogAddIndexReq();
+//        req.setLogPo(logPo);
+//        req.setIndexName("log");
+//        logElasticSearchService.addDoc(req);
     }
 
     /**

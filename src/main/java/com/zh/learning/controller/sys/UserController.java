@@ -5,15 +5,11 @@ import com.zh.learning.constants.LogOperationEnum;
 import com.zh.learning.controller.BaseController;
 import com.zh.learning.entity.ResponseEntity;
 import com.zh.learning.entity.ResponseEnum;
-import com.zh.learning.entity.po.sys.UserPo;
 import com.zh.learning.service.RedisService;
 import com.zh.learning.service.sys.MenuService;
 import com.zh.learning.service.sys.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

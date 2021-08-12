@@ -26,7 +26,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
