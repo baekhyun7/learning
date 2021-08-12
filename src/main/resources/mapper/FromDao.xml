@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zh.learning.dao.sys.FromDao">
+
+
+    <select id="getByFromId" resultType="com.zh.learning.entity.po.from.FromPropertiesPo">
+        SELECT
+	fp.*,
+	fc.NAME controlName,
+	fc.is_container isContainer
+FROM
+	from_properties fp
+	LEFT JOIN from_control fc ON fp.control_id = fc.id
+WHERE
+	fp.from_id = #{fromId}
+	ORDER BY
+	parent_id,sort
+    </select>
+
+</mapper>
